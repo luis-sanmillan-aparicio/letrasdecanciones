@@ -31,7 +31,18 @@
         <h2 style="color: green;">Resultado LRCLIB</h2>
         {% if results.lrclib.found %}
             <h3 style="color: green;">Letras</h3>
-            <pre style="white-space: pre-wrap; color: orange;">{{ results.lrclib.lyrics }}</pre>
+            <pre id="lyrics-text" style="white-space: pre-wrap; color: orange;">{{ results.lrclib.lyrics }}</pre>
+            <button onclick="copyLyrics()" style="background-color: green; color: black; border: none; padding: 0.3rem 0.8rem; cursor: pointer;">Copiar letra</button>
+            <script>
+                function copyLyrics() {
+                    const text = document.getElementById('lyrics-text').innerText;
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('Letra copiada al portapapeles');
+                    }).catch(() => {
+                        alert('Error al copiar la letra');
+                    });
+                }
+            </script>
             {% if results.lrclib.syncedLyrics %}
                 <h3 style="color: green;">Letras sincronizadas</h3>
                 <pre style="white-space: pre-wrap; color: orange;">{{ results.lrclib.syncedLyrics }}</pre>
@@ -46,3 +57,4 @@
     {% endif %}
 </body>
 </html>
+
