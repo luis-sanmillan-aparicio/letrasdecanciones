@@ -14,7 +14,6 @@ def home():
     error = None
 
     if song and artist:
-        # Aquí hacemos la búsqueda en Genius
         genius_data = {"found": False, "error": None, "title": None, "url": None, "image": None}
         try:
             headers = {"Authorization": f"Bearer {GENIUS_TOKEN}"}
@@ -33,21 +32,25 @@ def home():
         except Exception as e:
             genius_data["error"] = str(e)
 
-        # Aquí hacemos la búsqueda en lrclib
         lrclib_data = {"found": False, "lyrics": None, "syncedLyrics": None, "error": None}
         try:
-            params = {"track_name": song, "artist_name": artist}
-            if album:
-                params["album_name"] = album
-            r = requests.get("https://api.lrclib.net/api/get", params=params, timeout=10)
+            search_query = f"{song} {artist}"
+            url = f"https://lrclib.net/search?q={search_query.replace(' ', '+')}"
+            r = requests.get(url, timeout=10)
             r.raise_for_status()
-            lrclib_data_json = r.json()
-            if lrclib_data_json.get("plainLyrics"):
+            lrclib_search_results = r.json()
+
+            # Aquí debes procesar lrclib_search_results para extraer las letras;
+            # el formato exacto dependerá de la respuesta JSON real, ejemplo simplificado:
+
+            if lrclib_search_results and "lyrics" in lrclib_search_results:
                 lrclib_data.update({
                     "found": True,
-                    "lyrics": lrclib_data_json.get("plainLyrics"),
-                    "syncedLyrics": lrclib_data_json.get("syncedLyrics")
+                    "lyrics": lrclib_search_results.get("lyrics"),
+                    "syncedLyrics": lrclib_search_results.get("syncedLyrics", None)
                 })
+            else:
+                lrclib_data["error"] = "No lyrics found"
         except Exception as e:
             lrclib_data["error"] = str(e)
 
