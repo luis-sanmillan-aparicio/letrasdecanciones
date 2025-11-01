@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buscar Letras</title>
+</head>
+<body>
+    <h1>Buscar Letras</h1>
+    <form method="get" action="/">
+        <label>Canción (obligatorio):</label><br>
+        <input type="text" name="song" value="{{ song|default('') }}" required><br><br>
+
+        <label>Grupo/Artista (obligatorio):</label><br>
+        <input type="text" name="artist" value="{{ artist|default('') }}" required><br><br>
+
+        <label>Disco (opcional):</label><br>
+        <input type="text" name="album" value="{{ album|default('') }}"><br><br>
+
+        <input type="submit" value="Buscar">
+    </form>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    {% if results %}
+        <h2>Resultados lrclib</h2>
+        {% if results.lrclib.found %}
+            <pre>{{ results.lrclib.lyrics }}</pre>
+            {% if results.lrclib.syncedLyrics %}
+                <h3>Letras sincronizadas</h3>
+                <pre>{{ results.lrclib.syncedLyrics }}</pre>
+            {% endif %}
+        {% else %}
+            <p style="color:gray;">No se encontraron letras en lrclib. {{ results.lrclib.error }}</p>
+        {% endif %}
+
+        <h2>Resultados Genius</h2>
+        {% if results.genius.found %}
+            <h3>{{ results.genius.title }}</h3>
+            <p><a href="{{ results.genius.url }}" target="_blank">Ver en Genius</a></p>
+            {% if results.genius.image %}
+                <img src="{{ results.genius.image }}" alt="Imagen canción" width="300">
+            {% endif %}
+        {% else %}
+            <p style="color:gray;">No se encontraron datos en Genius. {{ results.genius.error }}</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
