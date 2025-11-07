@@ -16,6 +16,13 @@
         <button type="submit" style="background-color: green; color: black; border: none; padding: 0.5rem 1rem; cursor: pointer;">Buscar</button>
     </form>
 
+    <!-- Botón nuevo añadido -->
+    <button 
+        style="background-color: green; color: black; border: none; padding: 0.5rem 1rem; cursor: pointer; margin-top: 0.6rem;" 
+        onclick="window.open('https://sanmillanluisantonio.pythonanywhere.com/', '_blank')">
+        Trabajar con la letra
+    </button>
+
     {% if results %}
         <h2 style="color: green;">Resultado Genius</h2>
         {% if results.genius.found %}
@@ -57,4 +64,3 @@
     {% endif %}
 </body>
 </html>
-
